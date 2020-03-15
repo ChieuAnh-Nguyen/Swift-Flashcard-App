@@ -35,23 +35,39 @@ class ViewController: UIViewController {
         backLabel.layer.cornerRadius = 20
         backLabel.clipsToBounds = true
 
+        if flashcards.count < 1 {
+            let defaultFlashcard = Flashcard(Question: "How many ounces in 1 cup", Answer: "* ounces")
+            flashcards.append(defaultFlashcard)
+        }
         
+        updateLabels()
+        updateNextPrevButtons()
     }
 
     @IBAction func didTapOnPrev(_ sender: Any) {
-       currentIndex = currentIndex - 1
+        
+        currentIndex = currentIndex - 1
+    
+        if currentIndex < -1 {
+            currentIndex = 0
+        }
 
         updateLabels()
-    updateNextPrevButtons()
-        
+        updateNextPrevButtons()
     }
     
     @IBAction func didTapOnNext(_ sender: Any) {
+        
         currentIndex = currentIndex + 1
+        
+        // check if we're out of range
+        if currentIndex > flashcards.count - 1 {
+            currentIndex = flashcards.count - 1
+        }
+        
         updateLabels()
         updateNextPrevButtons()
-        
-        }
+    }
     
     
     func updateLabels() {
@@ -68,16 +84,20 @@ class ViewController: UIViewController {
     @IBOutlet weak var nextButton: UIButton!
     
     @IBAction func didTapOnFlashcard(_ sender: Any) {
-        frontLabel.isHidden = true
-        backLabel.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
-        
+        if frontLabel.isHidden {
+            frontLabel.isHidden = false
+            backLabel.isHidden = true
+        } else {
+            frontLabel.isHidden = true
+            backLabel.isHidden = false
+        }
     }
     
     func updateFlashcard(question: String, answer: String) {
         let flashcard = Flashcard(Question: question, Answer: answer)
         backLabel.text = flashcard.Answer
         frontLabel.text = flashcard.Question
-    frontLabel.isHidden = false
+        frontLabel.isHidden = false
         flashcards.append(flashcard)
         
         //logging on console
@@ -90,29 +110,27 @@ class ViewController: UIViewController {
         
         updateLabels()
     }
+    
     func updateNextPrevButtons() {
-        //disable next button if at end
+        // disable next button if at end
+        
         if currentIndex == flashcards.count - 1 {
             nextButton.isEnabled = false
-        }else{
+        } else{
            nextButton.isEnabled = true
-            
-        };if currentIndex == 0 {
+        }
+        
+        if currentIndex == 0 {
             prevButton.isEnabled = false
-            }else {
+        } else {
             prevButton.isEnabled = true
-            
         }
     }
 
-    
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         let navigationController = segue.destination as! UINavigationController
         let creationController = navigationController.topViewController as! CreationViewController
         creationController.flashcardsController = self
-
-
-}
+    }
+    
 }
