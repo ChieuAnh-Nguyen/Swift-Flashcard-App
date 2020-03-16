@@ -23,7 +23,7 @@ Added rounded corners, shadows and gave app another page to add questions and an
 
 ### App Walk-though
 
-<img src="http://g.recordit.co/iFrklBfsDv.gif" width=200><br>
+<img src="http://g.recordit.co/o5VteaBXK7.gif" width=200><br>
 
 ## Required
 - [x] User can open the creation screen
