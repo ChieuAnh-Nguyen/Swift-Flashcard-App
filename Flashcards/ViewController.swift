@@ -35,13 +35,15 @@ class ViewController: UIViewController {
         backLabel.layer.cornerRadius = 20
         backLabel.clipsToBounds = true
 
-        if flashcards.count < 1 {
-            let defaultFlashcard = Flashcard(Question: "How many ounces in 1 cup", Answer: "* ounces")
-            flashcards.append(defaultFlashcard)
-        }
+        readSavedFlashcards()
         
+        if flashcards.count == 0  {
+            updateFlashcard(question: "what is my name", answer: "chewy")
+        }else{
         updateLabels()
         updateNextPrevButtons()
+        }
+        
     }
 
     @IBAction func didTapOnPrev(_ sender: Any) {
@@ -107,8 +109,8 @@ class ViewController: UIViewController {
         
         //update buttons
         updateNextPrevButtons()
-        
         updateLabels()
+        saveAllFlashcardsToDisk()
     }
     
     func updateNextPrevButtons() {
@@ -133,4 +135,22 @@ class ViewController: UIViewController {
         creationController.flashcardsController = self
     }
     
+    func saveAllFlashcardsToDisk() {
+        
+    print("Flashcards saved to UserDefault")
+        let dictionaryArray = flashcards.map { (card) -> [String: String] in
+            return ["question":card.Question, "answer": card.Answer]
+    }
+        UserDefaults.standard.set(dictionaryArray, forKey: "flashcards")
+}
+    //read dictionary from disc if any
+    func readSavedFlashcards() {
+        if let dictionaryArray = UserDefaults.standard.array(forKey: "flashcards") as?  [[String:String]]{
+        // in here we know for sure we have a dictionary array
+            let savedCards = dictionaryArray.map { Dictionary -> Flashcard in
+                return Flashcard (Question:Dictionary["question"]!,Answer:Dictionary["answer"]!)
+           }
+                //put all these cards in our flashcards array
+                flashcards.append(contentsOf: savedCards)}
+    }
 }
