@@ -1,8 +1,7 @@
 ## Lab 3
 
 ### App Description
-`TODO://` Late Submission :(
-
+`TODO://`
 ### App Walk-though
 
 <img src="http://g.recordit.co/iFrklBfsDv.gif" width=200><br>
